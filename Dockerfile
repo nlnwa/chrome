@@ -46,6 +46,11 @@ RUN if [ "$USE_CHROME_STABLE" = "true" ]; then \
   npm run build &&\
   chown -R blessuser:blessuser $APP_DIR
 
+# Install x11vnc
+RUN apt update -qq && ln -fs /usr/shar/zoneinfo/Europe/Oslo /etc/localtime \
+  && DEBIAN_FRONTEND=noninteractive apt install x11vnc -qq -y \
+  && fc-cache -f -v
+
 # Run everything after as non-privileged user.
 USER blessuser
 

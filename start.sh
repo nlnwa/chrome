@@ -13,13 +13,17 @@ _kill_procs() {
 # Relay quit commands to processes
 trap _kill_procs SIGTERM SIGINT
 
-Xvfb :99 -screen 0 1024x768x16 -nolisten tcp -nolisten unix &
+Xvfb :99 -screen 0 1920x1200x16 &
 xvfb=$!
 
 export DISPLAY=:99
+
+x11vnc -forever -nopw -localhost &
+x11vnc=$!
 
 dumb-init -- node ./build/index.js $@ &
 node=$!
 
 wait $node
 wait $xvfb
+wait $x11vnc
